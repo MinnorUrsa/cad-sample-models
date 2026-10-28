@@ -2,6 +2,18 @@
 
 可 3D 打印的小玩具 + 样例零件。所有模型由 CadQuery（OpenCascade 内核）参数化生成。
 
+## 预览
+
+| 齿轮陀螺（顶） | 齿轮陀螺（底 / 锥尖） |
+|---|---|
+| ![gear_top](toys/gear_top.png) | ![gear_top_bottom](toys/gear_top_bottom.png) |
+
+| 指尖陀螺 | 小火箭 |
+|---|---|
+| ![fidget_spinner](toys/fidget_spinner.png) | ![rocket](toys/rocket.png) |
+
+![gear_a](toys/gear_a.png)
+
 ## 一、3D 打印小玩具（2026-10）
 
 | 文件 | 尺寸 (mm) | 实体体积 | 预估打印\* | 说明 |
