@@ -8,17 +8,13 @@
 |---|---|
 | ![gear_top](toys/gear_top.png) | ![gear_top_bottom](toys/gear_top_bottom.png) |
 
-| 指尖陀螺 | 小火箭 |
+| 指尖陀螺 | 小火箭 v5（八方位） |
 |---|---|
-| ![fidget_spinner](toys/fidget_spinner.png) | ![rocket](toys/rocket_a.png) |
+| ![fidget_spinner](toys/fidget_spinner.png) | ![rocket_v5_sheet](toys/rocket_v5_sheet.png) |
 
-| 小火箭（侧视：舷窗 + 环槽 + 裙摆） | 小火箭（舷窗特写） |
-|---|---|
-| ![rocket_side](toys/rocket_side.png) | ![rocket_win](toys/rocket_win.png) |
-
-| 小火箭（底部：喷口 + 尾翼） |
+| 小火箭 v5（侧视） |
 |---|
-| ![rocket_b](toys/rocket_b.png) |
+| ![rocket_v5_main](toys/rocket_v5_main.png) |
 
 ![gear_a](toys/gear_a.png)
 
@@ -28,7 +24,7 @@
 |---|---|---|---|---|
 | `toys/gear_top.stl` | 38 × 38 × 26 | 10 208 mm³ | ~12 min | 齿轮外缘陀螺，锥尖朝下打印 |
 | `toys/fidget_spinner.stl` | 66 × 60 × 7 | 8 445 mm³ | ~13 min | 三叶指尖陀螺，中心 608 轴承孔 Ø22.2 |
-| `toys/rocket.stl` | 31 × 36 × 61 | 7 569 mm³ | ~19 min | 中空小火箭：双舷窗 / 2 道环槽 / 加强环 / 裙摆 / 头锥探针 / 3 尾翼 |
+| `toys/rocket.stl` | 36 × 36 × 50 | 7 354 mm³ | ~18 min | 卡通玩具火箭 v5：钝锥头 / 4 片后掠尾翼 / 凸唇舷窗 / 3 段阶梯喷口 |
 | `toys/gear_a.stl` | 44 × 44 × 8 | 9 497 mm³ | ~12 min | 20 齿主动齿轮，m=2，Ø7 轴孔 |
 | `toys/gear_b.stl` | 24 × 23 × 8 | 2 074 mm³ | ~4 min | 10 齿从动齿轮，中心距 30 mm |
 
@@ -38,44 +34,46 @@
 
 - STL 单位是毫米，导入切片软件不要缩放。
 - **齿轮陀螺**：锥尖朝下直接打，锥面约 40° 悬垂，一般无需支撑；底面加 3–5 mm brim 更稳。
-- **火箭**：竖直打印，头锥与探针尖端悬垂较大，建议开"仅支撑悬垂"或把锥角改平缓。壁厚 1.6 mm = 4 圈 0.4 挤出。
+- **火箭 v5**：竖直打印，4 片尾翼落地、底部实心 7 mm 当配重，无需支撑；头锥锥角 68°，悬垂角小于 45° 可直接打。壁厚 1.2 mm = 3 圈 0.4 挤出。
 - **齿轮对**：两件分开打，中心距 30 mm 装底板即可啮合。
 - **指尖陀螺**：三叶配重孔可塞 M8 螺母，或直接实心打配重。
 
 ### 齿轮参数（可复现）
 
 齿廓为标准渐开线（压力角 20°，齿顶高系数 1.0，齿根高系数 1.25）。
+
 生成器 `gearlib.py` 在私有仓库 agentSpace 的 `_cad/scripts/` 下。
 
 ## 二、小火箭的「过程文件」
 
 **STEP 里没有草图。** AP203/AP214 只存最终 B-rep 曲面，CATIA 打开是一块哑实体（能测量、能布尔，但没有特征历史）。
 
-想看到"一步步长出来"的过程，这个仓库提供了三样东西：
+想看到“一步步长出来”的过程，这个仓库提供了三样东西：
 
 | 东西 | 能给你什么 |
 |---|---|
-| `toys/rocket_stages/` | 11 个中间实体，按序号打开就是生长过程 |
-| `docs/rocket_modeling.md` | 逐步建模说明：草图平面、坐标、每个特征参数 |
-| `scripts/make_rocket.vbs` | CATIA V5 宏，跑完得到带特征树、可改尺寸的 CATPart |
+| `toys/rocket_stages/` | 6 个中间实体，按序号打开就是生长过程 |
+| `docs/rocket_modeling.md` | 逐步建模说明（对应 v3 战术风格版） |
+| `scripts/make_rocket.vbs` | CATIA V5 宏，跑完得到带特征树、可改尺寸的 CATPart（对应 v3） |
 
-### 分阶段文件
+### 分阶段文件（v5）
 
 | 序号 | 文件 | 这一步做了什么 | 体积 |
 |---|---|---|---|
-| 1 | `s1_body.step` | 箭体外壳 Ø21 × 40 | 13 854 mm³ |
-| 2 | `s2_cavity.step` | 挖内腔 Ø17.8，留 3 mm 底 | 4 647 mm³ |
-| 3 | `s3_nozzle.step` | 开锥形喷口 Ø11.2 → Ø5.2 | 4 428 mm³ |
-| 4 | `s4_nose.step` | 加头锥（高 17，锥顶 Ø1.6） | 6 552 mm³ |
-| 5 | `s5_seam.step` | 切环形分界槽 | 6 521 mm³ |
-| 6 | `s6_rib.step` | 加加强环（凸 0.75） | 6 603 mm³ |
-| 7 | `s7_window.step` | 双侧舷窗：环框 Ø8.0 宽 0.9 凸 0.4 + 浅坑 Ø6.4 深 0.83 | 6 579 mm³ |
-| 8 | `s8_fins.step` | 加 3 片后掠尾翼 | 7 614 mm³ |
-| 9 | `s9_skirt.step` | 加底部裙摆（外扩 0.4，高 1.6） | 7 631 mm³ |
-| 10 | `s10_detail.step` | 2 道环槽（深 0.7）+ 头锥凹环（Ø7.6） | 7 563 mm³ |
-| 11 | `s11_probe.step` | 加头锥探针（杆 Ø1.1 + 球 Ø2.0） | 7 569 mm³ |
+| 1 | `s1_body.step` | 箭体外壳 Ø22 × 35 | 13 305 mm³ |
+| 2 | `s2_cavity.step` | 挖内腔 Ø19.6，留 7 mm 实心底 | 4 857 mm³ |
+| 3 | `s3_nozzle.step` | 开 3 段阶梯喷口 Ø14 → Ø10 → Ø6.5 | 4 226 mm³ |
+| 4 | `s4_nose.step` | 加钝头锥（高 15，顶面 Ø4） | 5 497 mm³ |
+| 5 | `s5_port.step` | 凸唇舷窗 Ø10 + 浅坑 Ø7.2 深 1.2 | 5 503 mm³ |
+| 6 | `s6_fins.step` | 加 4 片后掠尾翼（厚 2.8） | 7 354 mm³ |
 
-体积在 2→3 步会先降后升，是因为内腔切掉的多、喷口又切掉一些——这是正常的。
+体积在第 2、3 步会降，是内腔和喷口切掉的实体——这是正常的。
+
+### v3 版本（历史）
+
+早期做过一版战术风格的火箭（Ø21 × 长 61，双舷窗 / 两道环槽 / 加强环 / 头锥探针 / 3 片尾翼），
+对应 `docs/rocket_modeling.md` 和 `scripts/make_rocket.vbs`。
+v5 是照实物照片重做的卡通风格，两者不是同一个模型。旧图 `rocket_a.png` / `rocket_side.png` / `rocket_win.png` / `rocket_b.png` 留作对比。
 
 ### CATIA 宏
 
@@ -105,5 +103,4 @@ cscript //nologo scripts\make_rocket.vbs
 `File > Open` → 选 `.step` → 打开后是 Part 文档 → `File > Save As` → `CATPart`。
 
 **关于 CATPart**：CATPart 是达索私有二进制格式，没有公开规范，无法直接生成；
-只能由 CATIA 自己从 STEP/IGES 转存。本仓库提供的就是这个"中转原料"。
-
+只能由 CATIA 自己从 STEP/IGES 转存。本仓库提供的就是这个“中转原料”。
