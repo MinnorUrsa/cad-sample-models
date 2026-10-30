@@ -1,143 +1,79 @@
-# cad-sample-models — 参数化 CAD 零件 + CATIA 兼容件
+# cad-sample-models
 
-用 [CadQuery](https://cadquery.readthedocs.io/)（OpenCascade 内核）参数化建模，导出 **STEP / STL**。
-STEP 在 CATIA V5 里 `File > Open` 打开，再 `File > Save As` 即得 **.CATPart**。
+可 3D 打印的小玩具 + 样例零件。所有模型由 CadQuery（OpenCascade 内核）参数化生成。
 
-> **为什么没有现成的 .CATPart**：CATPart 是达索私有二进制（OLE 复合文档 + 私有几何流），
-> 没有公开规范，也没有任何开源写入器。所有 Python/C# 方案（pycatia 等）本质都是
-> **驱动本机已安装的 CATIA**，而不是生成文件。所以这份仓库给的是 STEP——CATIA 原生支持，
-> 打开后另存一步就是 .CATPart，且带完整实体几何。
+## 预览
 
----
-
-## 火箭模型 v13（当前版本）
-
-| 八方位 | 斜角 |
+| 齿轮陀螺（顶） | 齿轮陀螺（底 / 锥尖） |
 |---|---|
-| ![八方位](toys/rocket_v13_sheet.png) | ![斜角](toys/rocket_v13_hero.png) |
+| ![gear_top](toys/gear_top.png) | ![gear_top_bottom](toys/gear_top_bottom.png) |
 
-| 舷窗正对 | 检修舱口 |
+| 指尖陀螺 | 小火箭 v14 |
 |---|---|
-| ![舷窗](toys/rocket_v13_port.png) | ![舱口](toys/rocket_v13_hatch.png) |
+| ![fidget_spinner](toys/fidget_spinner.png) | ![rocket](toys/rocket_v14_sheet.png) |
 
-### 规格
+![gear_a](toys/gear_a.png)
 
-| 项 | 值 |
-|---|---|
-| 外形 | 30.98 × 35.77 × 60.03 mm |
-| 体积 | 5 944.7 mm³ |
-| 表面积 | 7 746.2 mm² |
-| 拓扑 | 118 faces，单实体，`isValid = true` |
-| 预估打印 | **18.7 min**（0.2 mm 层高 / 20% 填充 / 7 mm³·s⁻¹） |
+## 一、3D 打印小玩具（2026-10）
 
-### 几何特征
+| 文件 | 尺寸 (mm) | 实体体积 | 预估打印\* | 说明 |
+|---|---|---|---|---|
+| `toys/gear_top.stl` | 38 × 38 × 26 | 10 208 mm³ | ~12 min | 齿轮外缘陀螺，锥尖朝下打印 |
+| `toys/fidget_spinner.stl` | 66 × 60 × 7 | 8 445 mm³ | ~13 min | 三叶指尖陀螺，中心 608 轴承孔 Ø22.2 |
+| `toys/rocket.stl` | 31.0 × 35.8 × 60.0 | 6 024 mm³ | ~19 min | 战术风中空小火箭，14 个建模阶段 |
+| `toys/gear_a.stl` | 44 × 44 × 8 | 9 497 mm³ | ~12 min | 20 齿主动齿轮，m=2，Ø7 轴孔 |
+| `toys/gear_b.stl` | 24 × 23 × 8 | 2 074 mm³ | ~4 min | 10 齿从动齿轮，中心距 30 mm |
 
-| 部位 | 做法 |
-|---|---|
-| 箭体 | Ø21 × 40，壁厚 1.4，底部留 3 mm 实心底 |
-| 喷口 | 锥形通腔 Ø11.2 → Ø5.2，深 6 |
-| 头锥 | 16 高圆锥 + 顶面 Ø1.6，球头 R2.0，顶针 Ø1.1 × 4 + 球 R1.0 |
-| 头锥挖空 | 内壁 1.4 等厚跟随锥面 |
-| 分界槽 | z = 39.5 ~ 40.5，径向深 0.9 |
-| 加强环 | z = 13.6 ~ 15.2，凸出 0.75 |
-| 裙摆 | z = 0 ~ 1.8，外扩 0.65 |
-| 环槽 | z = 21.6 / 31.6，宽 0.9 |
-| 头锥凹环 | z ≈ 47.2，宽 0.8 |
-| 纵向加强筋 | 4 条 × 3 段（被环槽自然打断），R0.9，凸 0.5 |
-| 检修舱口 | +X 侧 2.4 × 7.0 × 9.0 凹槽 + 槽内把手 |
-| 舷窗 | ±Y 双侧，Ø12 唇环 + R8.4 球冠坑，窗心 z = 24.8 |
-| 姿控喷口 | 头锥 4 个，径向 Ø2.8 浅坑，45° 分布 |
-| 尾翼 | 3 片，厚 2，外伸 9，高 12.5，五段折线带翼尖切角 |
+\* 预估基于 0.4 mm 喷嘴 / 0.2 mm 层高 / 20% 填充 / 约 7 mm³/s 有效挤出速率，实际以切片软件为准。
 
-### 14 个建模阶段
+### 打印建议
 
-`rocket_stages/` 里按顺序打开，就能看到「从一根光筒长成成品」的过程：
+- STL 单位是毫米，导入切片软件不要缩放。
+- **齿轮陀螺**：锥尖朝下直接打，锥面约 40° 悬垂，一般无需支撑；底面加 3–5 mm brim 更稳。
+- **火箭**：竖直打印。内腔从底部喷口贯通到顶部，属内部空心结构，切片时开"检测薄壁"会更保险。
+- **齿轮对**：两件分开打，中心距 30 mm 装底板即可啮合。
+- **指尖陀螺**：三叶配重孔可塞 M8 螺母，或直接实心打配重。
 
-| # | 文件 | 体积 mm³ | 做了什么 |
+### 齿轮参数（可复现）
+
+齿廓为标准渐开线（压力角 20°，齿顶高系数 1.0，齿根高系数 1.25）。
+生成器 `gearlib.py` 在私有仓库 agentSpace 的 `_cad/scripts/` 下。
+
+## 二、火箭 v14 修复记录（2026-10-30）
+
+上一版（v13）在切片软件里报"空层"和"有个窗子悬空"。逐层扫面 + STL 连通性分析定位到四个真因，全部已修：
+
+| # | 问题 | 真因 | 修法 |
 |---|---|---|---|
-| 1 | `s1_body.step` | 13 854.4 | 光筒 Ø21 × 40 |
-| 2 | `s2_cavity.step` | 4 228.7 | 挖内腔，留 3 mm 底 |
-| 3 | `s3_nozzle.step` | 4 005.2 | 锥形喷口通腔 |
-| 4 | `s4_nose.step` | 5 020.7 | 加头锥 + 球头 + 挖空 + 顶针 |
-| 5 | `s5_seam.step` | 4 987.2 | 切分界槽 |
-| 6 | `s6_rib.step` | 5 069.2 | 加加强环 |
-| 7 | `s7_skirt.step` | 5 108.6 | 加裙摆 |
-| 8 | `s8_rings.step` | 5 041.2 | 两道环槽 + 头锥凹环 |
-| 9 | `s9_ribs.step` | 5 106.5 | 4 条纵向加强筋（分三段） |
-| 10 | `s10_hatch.step` | 5 063.1 | 检修舱口凹槽 + 把手 |
-| 11 | `s11_ports.step` | 5 031.9 | 双侧舷窗（唇环 + 球坑） |
-| 12 | `s12_rcs.step` | 5 019.5 | 头锥 4 个姿控喷口 |
-| 13 | `s13_probe.step` | 5 024.2 | 顶针 + 球头 |
-| 14 | `s14_fins.step` | 5 944.8 | 3 片尾翼 |
+| 1 | +Y 侧舷窗悬空 | `Workplane("XZ")` 法向是 **−Y**，`extrude(-1.2)` 实际往 +Y 长，+`sy*(r+0.6)` 平移后整圈浮在筒外 0.6 mm | 改成 `extrude(-sy*1.2)` + 平移 `sy*(r-0.6)`，两侧都埋进筒壁 |
+| 2 | 舷窗底部 0 壁厚 | 球坑 R8.4 @ y=17.5，最深点正好落在内腔壁（9.1），相切即穿孔 | 改 R7.6 @ y=17.2，最深 9.6，留 0.5 mm 实壁，窗变成盲窗 |
+| 3 | 检修槽边缘 0.4 mm 壁 | 槽宽 7.0，在 y=±3.5 处筒面半径 9.9，槽底 9.5，只剩 0.4 mm（≈一条线宽） | 槽宽收到 5.6，边缘保留 0.6 mm |
+| 4 | STL 不水密 | OCC 三角化在球头顶点吐了 1 个零面积三角形 → 1 条开边界，切片器据此报空层 | 导出后过一遍 trimesh：删退化面 + 补洞 + 统一法向 |
 
-> 体积不是单调递增的：切槽、挖窗会减料。第 14 步跳 +920 是加了尾翼。
+修复后自检：
 
-CATIA 里复现这台的完整手工步骤见 [`docs/rocket_modeling.md`](docs/rocket_modeling.md)。
+- 单实体（solids = 1）、单壳体（shells = 1）、单连通体（bodies = 1）
+- `watertight = True`，边界边 0
+- 沿 Z 每 0.1 mm 切一层共 600 层，逐层检查闭合轮廓，**异常层 0**
 
----
+## 三、CATIA 验证零件
 
-## 其他零件（CATIA 版本兼容验证）
+| 文件 | 协议 / 格式 | 用途 |
+|---|---|---|
+| `flange_ap203.step` | STEP AP203 (CONFIG_CONTROL_DESIGN, 1994) | **首选**，兼容性最好 |
+| `flange_ap214.step` | STEP AP214 (AUTOMOTIVE_DESIGN, 2000) | 次选 |
+| `flange.step` | STEP AP214 | 同上（默认导出） |
+| `flange.iges` | IGES 5.3 | 最后兜底 |
+| `bushing.step` | STEP AP214 | 第二个零件（轴套） |
 
-| 文件 | 说明 |
-|---|---|
-| `flange_ap203.step` | 法兰，AP203（1994 协议），老 CATIA 首选 |
-| `flange_ap214.step` | 法兰，AP214（2000 协议） |
-| `flange.iges` | 法兰，IGES 5.3 兜底 |
-| `flange.png` | 法兰渲染预览 |
-| `bushing.step` | 轴套 Ø40 / Ø20 × 50，两端 1.5 倒角 |
+零件参数：法兰外径 Ø80 × 厚 12，中心通孔 Ø30，4 × Ø8 均布 PCD 60，外缘 R2；
+轴套外径 Ø40 / 内孔 Ø20 × 长 50，两端 1.5 倒角。
 
-法兰：Ø80 × 12，中心孔 Ø30，4 × Ø8 @ PCD60，外缘 R2 → 48 996.87 mm³。
-轴套：46 699.78 mm³。
+校验：`MANIFOLD_SOLID_BREP` 实体、毫米单位、回读 `isValid = true`。
 
-三份格式都含 `MANIFOLD_SOLID_BREP` + `SI_UNIT(.MILLI.,.METRE.)`，即真实体、毫米单位。
+## 四、在 CATIA 里打开
 
----
+`File > Open` → 选 `.step` → 打开后是 Part 文档 → `File > Save As` → `CATPart`。
 
-## 在 CATIA 里打开
-
-1. `File > Open` → 选 `.step` / `.stp` / `.iges`
-2. 弹出导入选项时保持默认（CATIA 会自动识别单位）
-3. 打开后是 `Part` 里的一个实体，可直接测量、布尔、改模
-4. `File > Save As` → 类型选 `CATPart` → 得到 .CATPart
-
-老版本兼容：CATIA V5 从 R7（2001）起内置 STEP 导入，版本基本不是问题；
-真正的门槛是 license——STEP 属于 `ST1 - STEP Core Interface`，IGES 属于 `IG1 - IGES Interface`，
-教学版一般带，机房完整版更没问题。保险顺序：AP203 → AP214 → IGES。
-
----
-
-## 用脚本重跑
-
-```powershell
-$env:PYTHONPATH='<repo>/_cad/site'
-cd <repo>/_cad
-
-# 生成火箭 + 分阶段 STEP
-py scripts\toys.py toys rocket
-
-# 渲染单视角（方位角, 俯仰角）
-py scripts\render_stl.py toys\rocket.stl toys\v_90.png 90 12
-
-# 拼审视图
-py scripts\render_sheet.py toys\v_0.png toys\v_45.png toys\sheet.png
-```
-
----
-
-## 目录
-
-```
-.
-├── README.md
-├── docs/
-│   └── rocket_modeling.md      # CATIA 手工复现步骤（14 阶段）
-├── scripts/
-│   ├── probe.vbs               # CATIA COM API 逐项探测（需装 CATIA）
-│   ├── batch_stp2catpart.vbs   # 批量 STEP → CATPart（需装 CATIA）
-│   └── make_rocket.vbs         # CATIA COM 建模宏（需装 CATIA）
-├── toys/
-│   ├── rocket.stl / rocket.step
-│   ├── rocket_v13_{sheet,hero,port,hatch}.png
-│   └── rocket_stages/s1 ... s14.step
-└── flange*.step / flange.iges / bushing.step
-```
+**关于 CATPart**：CATPart 是达索私有二进制格式，没有公开规范，无法直接生成；
+只能由 CATIA 自己从 STEP/IGES 转存。本仓库提供的就是这个"中转原料"。
